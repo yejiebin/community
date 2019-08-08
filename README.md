@@ -27,3 +27,22 @@
 [Live Reload](https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei/related)  
 [Postman](https://chrome.google.com/webstore/detail/coohjcphdfgbiolnekdpbcijmhambjff)
 
+## 脚本
+```sql
+create table USER
+(
+  ID           INTEGER default (NEXT VALUE FOR PUBLIC.SYSTEM_SEQUENCE_4D0288E0_77AA_410C_85EE_097AF9AE8404) auto_increment,
+  ACCOUNT_ID   VARCHAR(100),
+  NAME         VARCHAR(50),
+  TOKEN        CHAR(16),
+  GMT_CREATE   BIGINT,
+  GMT_MODIFIED BIGINT,
+  constraint USER_PK
+    primary key (ID)
+);
+```
+
+```bash
+mvn flyway:migrate
+mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate
+```
