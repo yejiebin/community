@@ -1,39 +1,30 @@
 package com.yjb.controller;
 
-import com.yjb.mapper.UserMapper;
+import com.yjb.dto.PaginationDTO;
 import com.yjb.model.User;
-import com.yjb.service.IndexService;
+import com.yjb.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 @Controller
 public class IndexController {
 
     @Autowired
-    IndexService indexService;
+    QuestionService questionService;
 
     @GetMapping("/")
-    public String toIndex(HttpServletRequest request, Model model) {
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null && cookies.length > 0) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("token")) {
-                    User user = indexService.findByToken(cookie.getValue());
-                    if (user != null) {
-                        request.getSession().setAttribute("user", user);
-                    }
-                }
-            }
-        }
-        List questionList = indexService.list();
-        model.addAttribute("questionList", questionList);
+    public String toIndex(@RequestParam(name = "page", defaultValue = "1") Integer page,
+                          @RequestParam(name = "size", defaultValue = "10") Integer size,
+                          HttpServletRequest request, Model model) {
+
+        User user = (User) request.getSession().getAttribute("user");
+        PaginationDTO questionList = questionService.list(page, size);
+        model.addAttribute("pagination", questionList);
 
         return "index";
     }
