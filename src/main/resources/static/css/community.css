@@ -41,11 +41,12 @@ body {
 
 .question-tag {
     margin-right: 5px;
+    padding-top: 5px;
 }
 
 .question-related {
-    line-height: 20px;
-    font-size: 12px;
+    line-height: 25px;
+    font-size: 16px;
     margin-left: 0;
     list-style: none;
     padding-left: 0;
@@ -114,12 +115,19 @@ body {
 }
 
 .menu .icon {
-    margin-right: 6px;
+    margin-right: 10px;
     font-size: 15px;
     cursor: pointer;
 }
 
+.menu .time-format {
+    margin-right: 10px;
+    font-size: 15px;
+    cursor: text;
+}
+
 .menu .comment-icon {
+    margin-right: 10px;
     font-size: 15px;
     cursor: pointer;
 }
@@ -140,3 +148,15 @@ body {
     text-align: center;
     color: #666;;
 }
+
+.img-avatar {
+    margin-top: 10px;
+}
+
+.question_content {
+    font-family:  "Arial";
+    text-indent: 2em;
+    maigin: 1em;
+    line-height: 2;
+}
+

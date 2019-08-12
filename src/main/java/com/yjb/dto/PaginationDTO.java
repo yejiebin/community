@@ -2,6 +2,7 @@ package com.yjb.dto;
 
 import lombok.Data;
 
+import java.security.acl.LastOwnerException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,10 +15,10 @@ public class PaginationDTO<T> {
     private boolean showEndPage;
     private Integer page;
     private List<Integer> pages = new ArrayList<>();
-    private Integer totalPage;
-    private Integer totalCount;
+    private Long totalPage;
+    private Long totalCount;
 
-    public PaginationDTO(Integer page, Integer size, Integer totalCount) {
+    public PaginationDTO(Integer page, Integer size, Long totalCount) {
         this.page = page;
         this.totalCount = totalCount;
 

@@ -1,13 +1,15 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>码匠社区</title>
+    <title>一叶子社区</title>
     <head th:insert="~{import :: head}"></head>
+    <head th:insert="~{import :: markdown}"></head>
 </head>
 <body>
 <div th:insert="~{navigation :: nav}"></div>
 <div class="container-fluid main">
     <div class="row">
+        <!--左边-->
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
             <h2><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 发起</h2>
             <hr>
@@ -19,17 +21,56 @@
                 </div>
                 <div class="form-group">
                     <label for="description">问题补充（必填，请参照右侧栏提醒）：</label>
-                    <textarea class="form-control" name="description" id="description" th:text="${description}" placeholder="内容..."
-                              cols="30"
-                              rows="10"></textarea>
+                    <div id="question-editor">
+                        <textarea style="display:none;" class="form-control" name="description" id="description" th:text="${description}" placeholder="内容..."
+                                  cols="30"
+                                  rows="10"></textarea>
+                    </div>
+                    <script type="text/javascript">
+                        $(function() {
+                            var editor = editormd("question-editor", {
+                                width  : "100%",
+                                height : 350,
+                                path   : "/js/lib/",
+                                delay: 0,
+                                watch: false,
+                                placeholder: "请输入问题描述"
+                            });
+                        });
+                    </script>
                 </div>
 
                 <div class="form-group">
                     <label for="tag">添加标签：</label>
-                    <input type="text" class="form-control" name="tag" id="tag" th:value="${tag}" placeholder="输入标签，以，号分隔">
+                    <input type="text" onclick="showSelectTag(this)" class="form-control" name="tag" id="tag" th:value="${tag}" placeholder="输入标签，以，号分隔">
+                </div>
+                <div id="select-tag" class="publish-tag-tab">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation"
+                            th:each="selectCategory,selectCategoryStat: ${tags}"
+                            th:class="${selectCategoryStat.first ? 'active':''}">
+                            <a th:href="${'#'+selectCategory.categoryName}" aria-controls="home" role="tab"
+                               data-toggle="tab" th:text="${selectCategory.categoryName}"></a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div role="tabpanel"
+                             th:each="selectCategory: ${tags}"
+                             th:id="${selectCategory.categoryName}"
+                             th:classappend="${selectCategoryStat.first ? 'active tab-pane':'tab-pane'}">
+                                <span>
+                                    <span class="label label-info" onclick="selectTag(this)"
+                                          th:each="selectTag: ${selectCategory.tags}"
+                                          th:data-tag="${selectTag}">
+                                        <span class="glyphicon glyphicon-tags"></span>
+                                        <span th:text="${' '+selectTag}"></span>
+                                    </span>
+                                </span>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="container-fluid main ">
+                <div class="container-fluid main">
                     <div class="row">
                         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
                             <div class="alert alert-danger alert-dismissible col-lg-12 col-md-12 col-sm-12 col-xs-12" role="alert"
@@ -48,6 +89,7 @@
                 </div>
             </form>
         </div>
+        <!--右边-->
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
             <h3>问题发起指南</h3>
             • 问题标题: 请用精简的语言描述您发布的问题，不超过25字 <br>

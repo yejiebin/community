@@ -33,7 +33,7 @@ function comment2target(targetId, type, content) {
                 if (response.code == 2003) {
                     var isAccepted = confirm(response.message);
                     if (isAccepted) {
-                        window.open("https://github.com/login/oauth/authorize?client_id=2859958f9f059979ed3a&redirect_uri=" + document.location.origin + "/callback&scope=user&state=1");
+                        window.open("https://github.com/login/oauth/authorize?client_id=0c41a8d9e2c67e0514ad&redirect_uri=" + document.location.origin + "/callback&scope=user&state=1");
                         window.localStorage.setItem("closable", true);
                     }
                 } else {
@@ -49,6 +49,18 @@ function comment(e) {
     var commentId = e.getAttribute("data-id");
     var content = $("#input-" + commentId).val();
     comment2target(commentId, 2, content);
+}
+
+function commentIncLike(e) {
+    var commentId = e.getAttribute("data-id");
+    var isLike = e.getAttribute("data-like");
+    if (isLike) {
+        e.classList.remove("active");
+        e.removeAttribute("data-like");
+    } else {
+        e.classList.add("active");
+        e.setAttribute("data-like","true");
+    }
 }
 
 /**
@@ -79,7 +91,7 @@ function collapseComments(e) {
                     var mediaLeftElement = $("<div/>", {
                         "class": "media-left"
                     }).append($("<img/>", {
-                        "class": "media-object img-rounded",
+                        "class": "media-object img-rounded img-avatar",
                         "src": comment.user.avatarUrl
                     }));
 
@@ -117,7 +129,7 @@ function collapseComments(e) {
     }
 }
 
-function showSelectTag() {
+function showSelectTag(e) {
     $("#select-tag").show();
 }
 

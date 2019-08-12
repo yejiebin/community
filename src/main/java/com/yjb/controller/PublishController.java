@@ -1,5 +1,6 @@
 package com.yjb.controller;
 
+import com.yjb.cache.TagCache;
 import com.yjb.dto.QuestionDTO;
 import com.yjb.mapper.QuestionMapper;
 import com.yjb.model.Question;
@@ -25,18 +26,20 @@ public class PublishController {
     QuestionService questionService;
 
     @GetMapping("/publish")
-    public String toPublish() {
+    public String toPublish(Model model) {
+        model.addAttribute("tags", TagCache.get());
         return "publish";
     }
 
     @GetMapping("/publish/{id}")
-    public String edit(@PathVariable(name = "id") Integer id,
+    public String edit(@PathVariable(name = "id") Long id,
                        Model model) {
         QuestionDTO question = questionService.findById(id);
         model.addAttribute("title", question.getTitle());
         model.addAttribute("description", question.getDescription());
         model.addAttribute("tag", question.getTag());
         model.addAttribute("id", question.getId());
+        model.addAttribute("tags", TagCache.get());
         return "publish";
     }
 
@@ -45,7 +48,7 @@ public class PublishController {
     public String publish(@RequestParam(value = "title", required = false) String title,
                           @RequestParam(value = "description", required = false) String description,
                           @RequestParam(value = "tag", required = false) String tag,
-                          @RequestParam(value = "id", required = false) Integer id,
+                          @RequestParam(value = "id", required = false) Long id,
                           HttpServletRequest request,
                           Model model) {
         model.addAttribute("title", title);
