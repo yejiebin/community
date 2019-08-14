@@ -37,7 +37,12 @@ public class QuestionService {
         UserExample example = new UserExample();
         example.createCriteria()
                 .andTokenEqualTo(token);
-        return userMapper.selectByExample(example).get(0);
+
+        List<User> users = userMapper.selectByExample(example);
+        if (users.size() == 1) {
+            return users.get(0);
+        }
+        return null;
     }
 
     public PaginationDTO list(Integer page, Integer size) {
