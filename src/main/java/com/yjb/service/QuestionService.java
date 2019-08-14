@@ -2,6 +2,7 @@ package com.yjb.service;
 
 import com.yjb.dto.PaginationDTO;
 import com.yjb.dto.QuestionDTO;
+import com.yjb.dto.QuestionQueryDTO;
 import com.yjb.exception.CustomizeErrorCode;
 import com.yjb.exception.CustomizeException;
 import com.yjb.mapper.QuestionExtMapper;
@@ -45,17 +46,39 @@ public class QuestionService {
         return null;
     }
 
-    public PaginationDTO list(Integer page, Integer size) {
+    public PaginationDTO list(String search, String tag, Integer page, Integer size) {
+        QuestionQueryDTO questionQueryDTO = new QuestionQueryDTO();
 
-        long totalCount = questionMapper.countByExample(null);
+        if (StringUtils.isNotBlank(search)) {
+            String[] split = search.split(" ");
+            search = Arrays.stream(split)
+                    .filter(StringUtils::isNotBlank)
+                    .map(t -> t.replace("+", "").replace("*", ""))
+                    .filter(StringUtils::isNotBlank)
+                    .collect(Collectors.joining("|"));
+            questionQueryDTO.setSearch(search);
+        }
+
+        if(StringUtils.isNotBlank(tag)){
+            tag = tag.replace("+", "").replace("*", "");
+            questionQueryDTO.setTag(tag);
+        }
+
+
+        long totalCount = questionExtMapper.countByQuestionQueryDTO(questionQueryDTO);
         long totalPage = totalCount % size != 0 ? totalCount / size + 1 : totalCount / size;
+        PaginationDTO<QuestionDTO> paginationDTO = new PaginationDTO<>(page, size, totalCount);
+        if (totalCount <= 0) {
+            return paginationDTO;
+        }
+
         if (page < 1) page = 1;
         if (page > totalPage) page = Math.toIntExact(totalPage);
 
-        QuestionExample example = new QuestionExample();
-        example.setOrderByClause("gmt_create desc");
-        RowBounds rowBounds = new RowBounds((page-1)*size, size);
-        List<Question> questions = questionMapper.selectByExampleWithRowbounds(example, rowBounds);
+        questionQueryDTO.setOffset((page-1)*size);
+        questionQueryDTO.setSize(size);
+
+        List<Question> questions = questionExtMapper.selectByQuestionQueryDTO(questionQueryDTO);
         List<QuestionDTO> questionDTOs = new ArrayList<>();
         for (Question question : questions) {
             User user = userMapper.selectByPrimaryKey(question.getCreator());
@@ -65,7 +88,7 @@ public class QuestionService {
             questionDTOs.add(questionDTO);
         }
 
-        PaginationDTO<QuestionDTO> paginationDTO = new PaginationDTO<>(page, size, totalCount);
+
 
         paginationDTO.setData(questionDTOs);
         return paginationDTO;

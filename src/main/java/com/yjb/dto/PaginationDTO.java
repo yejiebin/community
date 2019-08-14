@@ -22,7 +22,7 @@ public class PaginationDTO<T> {
         this.page = page;
         this.totalCount = totalCount;
 
-        totalPage = (totalCount%size == 1 ? totalCount/size+1 : totalCount/size);
+        totalPage = (totalCount%size != 0 ? totalCount/size+1 : totalCount/size);
         showPrevious = (page <= 1 ? false  : true);
         showNext = (page >= totalPage ? false : true);
 

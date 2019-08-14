@@ -10,9 +10,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * Created by codedrinker on 2019/5/28.
- */
 //@Controller
 //@RequestMapping("error")
 public class CustomizeErrorController implements ErrorController {

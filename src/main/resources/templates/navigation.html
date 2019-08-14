@@ -11,9 +11,9 @@
                 <a class="navbar-brand" th:href="@{/}">一叶子社区</a>
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <form class="navbar-form navbar-left">
+                <form action="/" method="get" class="navbar-form navbar-left">
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="搜索问题">
+                        <input name="search" type="text" class="form-control" placeholder="搜索问题">
                     </div>
                     <button type="submit" class="btn btn-default">搜索</button>
                 </form>

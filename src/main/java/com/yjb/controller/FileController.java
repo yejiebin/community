@@ -2,6 +2,7 @@ package com.yjb.controller;
 
 import com.yjb.dto.FileDTO;
 import com.yjb.provider.UCloudProvider;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,10 +12,8 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * Created by codedrinker on 2019/6/26.
- */
 @Controller
+@Slf4j
 public class FileController {
     @Autowired
     private UCloudProvider uCloudProvider;
@@ -34,6 +33,7 @@ public class FileController {
             FileDTO fileDTO = new FileDTO();
             fileDTO.setSuccess(0);
             fileDTO.setMessage("上传失败");
+            log.error("upload error", e);
             return fileDTO;
         }
     }
